@@ -1,3 +1,9 @@
+- js 예약어를 JSX에 그대로 쓸 수 없다. 예> class -> className
+- JSX 에서 중괄호 안에 js표현식을 쓸수있다 예> <div>{ 1 + count }</div>
+- JSX 에서 return 은 한개의 태그만 리턴할 수 있다. <></>
+- JSX 에서 인라인 스타일은 js 객체를 쓴다. 속성은 카멜케이스로 변경사용한다.
+- JSX 에서 주석 : {/* 주석 */}
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -76,6 +82,8 @@ export default defineConfig([
 docker run -it --rm -v $(pwd):/app -w /app -p 5173:5173 node:lts bash
 
 npm create vite@latest . -- --template react-ts
+
+npm install
 
 npm run dev
 
