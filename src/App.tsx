@@ -8,7 +8,11 @@ import FunctionComponen from './test/functionComponent.tsx';
 import { Header, Footer, Main } from './test/Components.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const txtLeave = 'leave';
+  const txtEnter = 'enter';
+  const [name, setName] = useState(txtLeave);
+
 
   return ( // 태그안의 내용은 JSX 문법으로 작성
     <> {/**  JSX에서는 한줄주석은 안된다. */}
@@ -41,7 +45,10 @@ function App() {
         onMouseEnter={() => console.log('mouse enter')}
         onMouseLeave={() => console.log('mouse leave')}
         ><p>hello world</p></Main>
-      <Footer name={'이름'} as='div'>자식</Footer>
+      <Footer name={'이름'} as='div' onClick={(e) => {console.log(e);}}
+        onMouseEnter={() => setName(txtEnter)}
+        onMouseLeave={() => setName(txtLeave)}
+        >{name}</Footer>
       {/* <Footer/> */}
     </>
   )
