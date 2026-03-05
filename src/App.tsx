@@ -37,8 +37,11 @@ function App() {
       <FunctionComponen />
       <Header name='My App'>hi</Header>
         {/* <Header /> */}
-      <Main name='My Main' clickHandler={() => console.log('clicked')}><p>hello world</p></Main>
-      <Footer name='My Footer'></Footer>
+      <Main name='My Main' onClick={() => alert('clicked')}
+        onMouseEnter={() => console.log('mouse enter')}
+        onMouseLeave={() => console.log('mouse leave')}
+        ><p>hello world</p></Main>
+      <Footer name={'이름'} as='div'>자식</Footer>
       {/* <Footer/> */}
     </>
   )

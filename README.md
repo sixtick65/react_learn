@@ -4,6 +4,18 @@
 - JSX 에서 인라인 스타일은 js 객체를 쓴다. 속성은 카멜케이스로 변경사용한다.
 - JSX 에서 주석 : {/* 주석 */}
 
+```
+declare interface DynamicProps extends React.HTMLAttributes<HTMLElement> {
+    as? : React.ElementType;
+    name?: string;
+}
+/* 다이나믹 컴포넌
+const Tag = (as : Component = 'div', name, children, ...props) => {
+    return <Component {...props}>{name} {children}</Component>;
+}
+*/
+```
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
