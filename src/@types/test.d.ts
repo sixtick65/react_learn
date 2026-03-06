@@ -6,10 +6,22 @@ declare interface NameProps extends React.ComponentPropsWithoutRef<'div'> {
 
 declare interface DynamicProps extends React.HTMLAttributes<HTMLElement> {
     as? : React.ElementType;
-    name?: string;
 }
 /*
-const tag = (as : Component = 'div', name = 'default', children = '', ...props) => {
+const tag = (as : Component = 'div', children = '', ...props) => {
     return <Component {...props}>{name} {children}</Component>;
 }
 */
+
+
+
+type counterAction = 
+    { type: 'increment', payload: number } | 
+    { type: 'decrement', payload: number } | 
+    { type: 'reset' }; // union type
+
+interface Todo {
+  id: symbol | number;
+  text: string;
+  completed: boolean;
+}

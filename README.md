@@ -49,6 +49,8 @@ package.json
 "scripts": {
     "dev": "vite --host 0.0.0.0",
     }
+
+npm install -D tailwindcss@latest @tailwindcss/vite@latest daisyui@latest
 ```
 
 
