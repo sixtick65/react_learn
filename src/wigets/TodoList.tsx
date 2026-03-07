@@ -1,45 +1,91 @@
-import TodoInput from "../components/TodoInput";
-import { useState } from "react";
-import { DeleteIcon, PencilIcon } from "../Icons.tsx";
+// import TodoInput from "../components/TodoInput";
+import { useReducer, useState } from "react";
+import { XIcon } from "../Icons.tsx";
+
+interface Todo {
+  id: symbol;
+  text: string;
+  completed: boolean;
+}
+
+type todoAction = 
+    { type: 'ADD_TODO', payload: { text: string } } | 
+    { type: 'DELETE_TODO', payload: { id: symbol | number } } | 
+    { type: 'TOGGLE_TODO', payload: { id: symbol | number } }; // union type
+
+interface dispatchProps {
+    dispatch: React.Dispatch<todoAction>
+}
 
 
-const TodoList = () => {
+
+const todoReducer = (state: Todo[], action: todoAction): Todo[] => {
+    switch (action.type) {
+        case 'ADD_TODO':
+            return [...state, {
+                id: Symbol(),
+                text: action.payload.text,
+                completed: false,
+            }]; 
+        case 'DELETE_TODO':
+            return state.filter(todo => todo.id !== action.payload.id);
+        case 'TOGGLE_TODO':
+            return state.map(todo => 
+                todo.id === action.payload.id ? { ...todo, completed: !todo.completed } : todo
+            );
+        default:
+            return state;
+    }
+}
+
+
+export const TodoItem = ( { todo, dispatch } : { todo: Todo, dispatch: React.Dispatch<todoAction> }) => {
+    return (
+        <div className="flex items-center justify-between p-4 border-b">
+            <span>{todo.text}</span>
+            <button onClick={() => dispatch({ type: 'DELETE_TODO', payload: { id: todo.id } })}>
+                <XIcon className="size-6 hover:text-red-500" />
+            </button>
+        </div>
+    );
+}
+
+const TodoInput = ( { dispatch } : dispatchProps ) => {
     const [todo, setTodo] = useState<Todo>({
         id: Symbol(),
         text: '',
         completed: false,
     });
-    const [todos, setTodos] = useState<Todo[]>([]); // TODO 리스트는 Ref로 변경해야함
-    const handleAddTodo = () => {
-        if (todo.text.trim() === '') return; // 빈 문자열은 추가하지 않음
+  return (
+    <>
+      <input
+        type="text"
+        placeholder="할 일을 입력하세요"
+        className="input input-bordered w-full max-w-xs"
+        value={todo.text}
+        onChange={(e) => setTodo({ ...todo, text: e.target.value })}
+      />
+      <button className="btn btn-primary" onClick={() => {
+        if (todo.text.trim() === '') return;
+        dispatch({ type: 'ADD_TODO', payload: { text: todo.text } });
+        setTodo({ id: Symbol(), text: '', completed: false });
+      }}>
+        추가
+      </button>
+    </>
+  );
+};
 
-        setTodos([...todos, todo]); // 기존 할 일 목록에 새 할 일 추가
-        setTodo({ id: Symbol(), text: '', completed: false }); // 입력 필드 초기화
-    };
+const TodoList = () => {
+    const [todos, dispatch] = useReducer(todoReducer, []); 
+    
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">할 일 목록</h1>
-            <TodoInput todo={todo} setTodo={setTodo} onAddTodo={handleAddTodo} />
+            <TodoInput dispatch={dispatch} />
             <div className="">
                 {todos.map((todo: Todo) => (
-                    <div className="flex items-center justify-between border m-4 rounded-full p-2" id={todo.id.toString()}>
-                        <div className="flex items-center">
-                            <input type="checkbox" className="checkbox checkbox-primary mr-2" checked={todo.completed} onChange={() => {
-                                setTodos(todos.map(t => t.id === todo.id ? { ...t, completed: !t.completed } : t));
-                            }} />
-                            <span>{todo.text}</span>
-                        </div>
-                        <div className="flex gap-2">
-                            <button className="icon hover:text-primary" >
-                                <PencilIcon className="size-6" />
-                            </button>
-                            <button className="icon hover:text-primary" onClick={() => {
-                                setTodos(todos.filter(t => t.id !== todo.id));
-                            }}>
-                                <DeleteIcon className="size-6" />
-                            </button>
-                        </div>
-                    </div>
+                    <TodoItem todo={todo} dispatch={dispatch} key={todo.id.toString()} />
                 ))}
             </div>
         </div>
